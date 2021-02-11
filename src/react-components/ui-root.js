@@ -1942,12 +1942,6 @@ class UIRoot extends Component {
                   </button>
                 )}
 
-                {showInviteTip && (
-                  <div className={styles.inviteTip}>
-                    <div className={styles.inviteTipAttachPoint} />
-                    <FormattedMessage id={`entry.${isMobile ? "mobile" : "desktop"}.invite-tip`} />
-                  </div>
-                )}
                 {!embed &&
                   this.occupantCount() > 1 &&
                   !hasTopTip &&
@@ -1963,11 +1957,19 @@ class UIRoot extends Component {
                       </span>
                     </button>
                   )}
-                {embed && (
+
+                {showInviteTip && (
+                  <div className={styles.inviteTip}>
+                    <div className={styles.inviteTipAttachPoint} />
+                    <FormattedMessage id={`entry.${isMobile ? "mobile" : "desktop"}.invite-tip`} />
+                  </div>
+                )}
+                {/*{embed && (
                   <a href={baseUrl} className={inviteStyles.enterButton} target="_blank" rel="noopener noreferrer">
                     <FormattedMessage id="entry.open-in-window" />
                   </a>
-                )}
+                )}*/}
+                
                 {this.state.showShareDialog && (
                   <InviteDialog
                     allowShare={!isMobileVR}
@@ -2030,8 +2032,29 @@ class UIRoot extends Component {
               </button>
             )}
             {streamingTip}
-
-            {showObjectList && (
+            {/*For shpw presence List remove "!"*/}
+            {!showPresenceList && (
+              <PresenceList
+                hubChannel={this.props.hubChannel}
+                history={this.props.history}
+                presences={this.props.presences}
+                sessionId={this.props.sessionId}
+                signedIn={this.state.signedIn}
+                email={this.props.store.state.credentials.email}
+                onSignIn={this.showSignInDialog}
+                onSignOut={this.signOut}
+                expanded={!this.state.isObjectListExpanded && this.state.isPresenceListExpanded}
+                onExpand={expand => {
+                  if (expand) {
+                    this.setState({ isPresenceListExpanded: expand, isObjectListExpanded: false });
+                  } else {
+                    this.setState({ isPresenceListExpanded: expand });
+                  }
+                }}
+              />
+            )}
+            {/*For show object list remove "!"*/}
+            {!showObjectList && (
               <ObjectList
                 scene={this.props.scene}
                 onExpand={(expand, uninspect) => {
@@ -2052,29 +2075,8 @@ class UIRoot extends Component {
                 onInspectObject={el => switchToInspectingObject(el)}
               />
             )}
-
-            {showPresenceList && (
-              <PresenceList
-                hubChannel={this.props.hubChannel}
-                history={this.props.history}
-                presences={this.props.presences}
-                sessionId={this.props.sessionId}
-                signedIn={this.state.signedIn}
-                email={this.props.store.state.credentials.email}
-                onSignIn={this.showSignInDialog}
-                onSignOut={this.signOut}
-                expanded={!this.state.isObjectListExpanded && this.state.isPresenceListExpanded}
-                onExpand={expand => {
-                  if (expand) {
-                    this.setState({ isPresenceListExpanded: expand, isObjectListExpanded: false });
-                  } else {
-                    this.setState({ isPresenceListExpanded: expand });
-                  }
-                }}
-              />
-            )}
-
-            {showSettingsMenu && (
+            {/*Settings menu*/}
+            {/* {showSettingsMenu && (
               <SettingsMenu
                 history={this.props.history}
                 mediaSearchStore={this.props.mediaSearchStore}
@@ -2092,7 +2094,7 @@ class UIRoot extends Component {
                 }}
                 pushHistoryState={this.pushHistoryState}
               />
-            )}
+            )} */}
             {!entered && !streaming && !isMobile && streamerName && <SpectatingLabel name={streamerName} />}
             {showTopHud && (
               <div className={styles.topHud}>
@@ -2122,7 +2124,8 @@ class UIRoot extends Component {
                     this.setState({ showStreamingTip: false });
                   }}
                 />
-                {!watching && !streaming ? (
+                {/* help button */}
+                {/* {!watching && !streaming ? (
                   <UnlessFeature name="show_feedback_ui">
                     <div className={styles.nagCornerButton}>
                       <button onClick={() => this.pushHistoryState("modal", "help")} className={styles.helpButton}>
@@ -2138,7 +2141,7 @@ class UIRoot extends Component {
                       <FormattedMessage id="hide-ui.prompt" />
                     </button>
                   </div>
-                )}
+                )} */}
                 {!watching &&
                   !streaming && (
                     <IfFeature name="show_feedback_ui">
@@ -2149,8 +2152,8 @@ class UIRoot extends Component {
                       </div>
                     </IfFeature>
                   )}
-
-                {!streaming && (
+                  {/* Favorite Button */}
+                {/* {!streaming && (
                   <button
                     aria-label="Toggle Favorited"
                     onClick={() => this.toggleFavorited()}
@@ -2163,7 +2166,7 @@ class UIRoot extends Component {
                       <FontAwesomeIcon icon={faStar} />
                     </i>
                   </button>
-                )}
+                )} */}
               </div>
             )}
           </div>
